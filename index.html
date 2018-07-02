@@ -1,0 +1,229 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title> Cource POC </title>
+	<link rel="stylesheet" type="text/css" href="default.css">
+</head>
+<body>
+<script src="lodash.min.js"></script>
+<script src="index.js"></script>
+<script>
+  start();
+  let user_test = ["AI4", "AI5", "BI2", "ENA4", "ENA5", "ENA6", "FY3", "FY6", "HI2", "HI3", "KE2", "KE3", "KE4", "LI2", "LI6", "MAA6", "MAA7", "MAA8",
+    "MAA9", "MAA10", "MAA11", "MU5", "MU6", "MU7", "PS3", "PS4", "PS5", "RUB3", "RUB4", "UE2", "YH2"]
+
+  function start() {
+    console.log("start")
+    sessionStorage.setItem("courseindex", parseInt(1))
+    aviailableCourses = [];
+    getCourses().forEach((bar) => {
+      bar.forEach((slot) => {
+        slot.forEach((course) => {
+          if (!aviailableCourses.includes(course.code)) {
+            aviailableCourses.push(course.code);
+          }
+        })
+      })
+    })
+    aviailableCourses = _.sortBy(aviailableCourses)
+  }
+
+  function handleClick(user_choise, table) {
+    if (user_choise === undefined) {
+      user_choise = user_test
+    }
+    console.log(user_choise.length)
+    getData(user_choise, table, (response) => {
+      sessionStorage.setItem("table", JSON.stringify(response.table));
+      response.success.forEach((val) => {
+        console.log(document.querySelector("div#coursetable" + sessionStorage.getItem("courseindex") + " > div#p" + val.period + " > div#bar" + val.bar))
+        document.querySelector("div#coursetable" + sessionStorage.getItem("courseindex") + " > div#p" + val.period + " > div#bar" + val.bar).innerHTML = val.course
+      })
+      let failed = "<p>";
+      response.failed.forEach((val => {
+        console.log(val)
+        document.getElementById("error").className = "error"
+        failed += val.code + ": " + val.error + ". ";
+      }))
+      document.getElementById("error-wrapper").innerHTML = "Rippistä. Kaikki kurssit eivät mahtuneet tarjottimelle. Nämä jäivät yli:" + failed
+      let original = document.getElementById('coursetable' + sessionStorage.getItem("courseindex"));
+      let clone = original.cloneNode(true);
+      sessionStorage.setItem("courseindex", parseInt(sessionStorage.getItem("courseindex")) + 1)
+      clone.id = "coursetable" + sessionStorage.getItem("courseindex")
+      original.parentNode.appendChild(clone);
+    })
+  }
+
+  function collectChoises() {
+    let boxes = [].slice.call(document.getElementsByClassName("opinion"));
+    let choises = [];
+    boxes.forEach((val, index) => {
+      if (val.checked) {
+        choises.push(val.id);
+      }
+      if (index + 1 === boxes.length) {
+        if (choises.length > 0) {
+          if (sessionStorage.length !== 0) {
+            handleClick(choises, sessionStorage.table)
+          } else {
+            handleClick(choises, undefined)
+          }
+        }
+      }
+    })
+  }
+
+</script>
+<div class="container" id="container">
+	<div class="course-container" id="coursetable1">
+		<div class="info"><b>1.jakso:</b></div>
+		<div class="period" id="p0">
+			<div class="bar" id="bar0">
+				-
+			</div>
+			<div class="bar" id="bar1">
+				-
+			</div>
+			<div class="bar" id="bar2">
+				-
+			</div>
+			<div class="bar" id="bar3">
+				-
+			</div>
+			<div class="bar" id="bar4">
+				-
+			</div>
+			<div class="bar" id="bar5">
+				-
+			</div>
+			<div class="bar" id="bar6">
+				-
+			</div>
+			<div class="bar" id="bar7">
+			</div>
+		</div>
+		<div class="info"><b>2.jakso:</b></div>
+		<div class="period" id="p1">
+			<div class="bar" id="bar0">
+				-
+			</div>
+			<div class="bar" id="bar1">
+				-
+			</div>
+			<div class="bar" id="bar2">
+				-
+			</div>
+			<div class="bar" id="bar3">
+				-
+			</div>
+			<div class="bar" id="bar4">
+				-
+			</div>
+			<div class="bar" id="bar5">
+				-
+			</div>
+			<div class="bar" id="bar6">
+				-
+			</div>
+			<div class="bar" id="bar7">
+			</div>
+		</div>
+		<div class="info"><b>3.jakso:</b></div>
+		<div class="period" id="p2">
+			<div class="bar" id="bar0">
+				-
+			</div>
+			<div class="bar" id="bar1">
+				-
+			</div>
+			<div class="bar" id="bar2">
+				-
+			</div>
+			<div class="bar" id="bar3">
+				-
+			</div>
+			<div class="bar" id="bar4">
+				-
+			</div>
+			<div class="bar" id="bar5">
+				-
+			</div>
+			<div class="bar" id="bar6">
+				-
+			</div>
+			<div class="bar" id="bar7">
+			</div>
+		</div>
+		<div class="info"><b>4.jakso:</b></div>
+		<div class="period" id="p3">
+			<div class="bar" id="bar0">
+				-
+			</div>
+			<div class="bar" id="bar1">
+				-
+			</div>
+			<div class="bar" id="bar2">
+				-
+			</div>
+			<div class="bar" id="bar3">
+				-
+			</div>
+			<div class="bar" id="bar4">
+				-
+			</div>
+			<div class="bar" id="bar5">
+				-
+			</div>
+			<div class="bar" id="bar6">
+				-
+			</div>
+			<div class="bar" id="bar7">
+			</div>
+		</div>
+		<div class="info"><b>5.jakso:</b></div>
+		<div class="period" id="p4">
+			<div class="bar" id="bar0">
+				-
+			</div>
+			<div class="bar" id="bar1">
+				-
+			</div>
+			<div class="bar" id="bar2">
+				-
+			</div>
+			<div class="bar" id="bar3">
+				-
+			</div>
+			<div class="bar" id="bar4">
+				-
+			</div>
+			<div class="bar" id="bar5">
+				-
+			</div>
+			<div class="bar" id="bar6">
+				-
+			</div>
+			<div class="bar" id="bar7">
+			</div>
+		</div>
+		<div class="disabled" id="error">
+			<div class="error-wrapper" id="error-wrapper">asd</div>
+		</div>
+	</div>
+	<div class="options" id="options">
+		<div class="row">
+			<button onclick="collectChoises()" class="submit button">Send my choises</button>
+			<input type="text" id="name" placeholder="Oppilaan nimi">
+			<button onclick="handleClick()">Run the program with test data</button>
+			<button onclick="start()">clear</button>
+		</div>
+		<br>
+	</div>
+</div>
+</body>
+<script>
+  aviailableCourses.forEach((course) => {
+    document.getElementById("options").insertAdjacentHTML("beforeend", "<div class='opinion-wrapper'><input class='opinion' type='checkbox' id='" + course + "'><label for='" + course + "'>" + course + "</label></div>")
+  })
+</script>
+</html>
